@@ -7,7 +7,7 @@ using Pierre.Models;
 
 namespace Pierre.Controllers
 {
-  public class FlavorsControllers : Controllers
+  public class FlavorsControllers : Controller
   {
     private readonly PierreContext _db;
     public FlavorsControllers(PierreContext db)
@@ -40,7 +40,7 @@ namespace Pierre.Controllers
     public ActionResult AddTreat(int id )
     {
       Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavors => flavors.FlavorId== id);
-      Viewbag.TreatId = new SelectList(_db.Treats, "TreatId", "Type");
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Type");
       return View(thisFlavor);
     }
     [HttpPost]
@@ -59,7 +59,7 @@ namespace Pierre.Controllers
     public ActionResult Edit(int id)
     {
       Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavors => flavors.FlavorId == id);
-      return View(thisTag);
+      return View(thisFlavor);
     }
     [HttpPost]
     public ActionResult Edit(Flavor flavor)
@@ -79,7 +79,7 @@ namespace Pierre.Controllers
       [HttpPost, ActionName("Delete")]
       public ActionResult DeleteConfirmed(int id)
       {
-        Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavors = flavors.FlavorId == id);
+        Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
         _db.Flavors.Remove(thisFlavor);
         _db.SaveChanges();
         return RedirectToAction("Index");
