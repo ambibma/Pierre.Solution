@@ -6,6 +6,8 @@ namespace Pierre.Models
   {
     public int FlavorId {get;set;}
     public string Description {get;set;}
+    
+    public ApplicationUser User { get; set; }
     public List<TreatFlavor> JoinEntities {get; set; }
   }
 }
