@@ -3,24 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
-// using Microsoft.AspNetCore.Authorization;
-// using Microsoft.AspNetCore.Identity;
-// using System.Threading.Tasks;
-// using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using System.Security.Claims;
 using Pierre.Models;
 
 namespace Pierre.Controllers
 {
+    [Authorize]
     public class  TreatsController : Controller
     {
       private readonly PierreContext _db;
-      // private readonly UserManager<ApplicationUser> _userManager;
+      private readonly UserManager<ApplicationUser> _userManager;
 
-      public TreatsController(PierreContext db)
+      public TreatsController(UserManager<ApplicationUser> userManager,PierreContext db)
       {
         _db = db;
-        // _userManager = userManager;
+        _userManager = userManager;
       }
+      [AllowAnonymous]
       public ActionResult Index()
       {
         List<Treat> treats = _db.Treats.ToList();
@@ -33,13 +35,23 @@ namespace Pierre.Controllers
         return View();
       }
       [HttpPost]
-      public ActionResult Create(Treat treat)
+    public async Task<ActionResult> Create(Treat treat)
+    {
+      if(!ModelState.IsValid)
       {
+        return View(treat);
+      }
+      else
+      {
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+        treat.User = currentUser;
         _db.Treats.Add(treat);
         _db.SaveChanges();
         return RedirectToAction("Index");
       }
-
+    }
+      [AllowAnonymous]
       public ActionResult Details(int id)
       {
         Treat thisTreat = _db.Treats
