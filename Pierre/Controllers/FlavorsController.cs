@@ -3,18 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Pierre.Models;
 
 namespace Pierre.Controllers
 {
-  public class FlavorsControllers : Controller
+  public class FlavorsController : Controller
   {
     private readonly PierreContext _db;
-    public FlavorsControllers(PierreContext db)
+    public FlavorsController(PierreContext db)
     {
       _db = db;
     }
-    public ActionResult Index() => View(_db.Flavors.ToList());
+    public ActionResult Index()
+    {
+      List<Flavor> model = _db.Flavors.ToList();
+      return View(model);
+    }
     
     public ActionResult Details(int id)
     {
