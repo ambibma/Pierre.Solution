@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm())
 {
+  <p>@Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger", @style = "font-weight: 600;" })</p>
   @Html.LabelFor(model => model.Description)
   @Html.TextBoxFor(model => model.Description) 
   <input type="submit" value="Add new Flavor"/>
